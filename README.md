@@ -3,6 +3,7 @@ This repository contains the files needed to create a basic shiny app.
 A detailed explanation about how the app works is provided below
 
 **The code for the app can be found in the `Week_4_Assignment` folder**
+The ui and server codes are contained in a single file called `app.r`
 
 This repo also contains the files for the presentation
 
