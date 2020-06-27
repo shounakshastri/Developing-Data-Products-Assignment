@@ -1,0 +1,79 @@
+Week 4 Assignment - Generate Random Landmarks
+========================================================
+author: Shounak Shastri
+date: 27-06-2020
+autosize: true
+
+Explanation of the app
+========================================================
+
+This app places landmarks randomly on a map using leaflet
+
+- Provide the 4 inputs
+    - Latitude
+    - Longitude
+    - Range
+    - Number of Landmarks
+- Click the generate map button
+- Should generate a map with the number of landmarks specified and placed randomly between the latitude and langitude values specified by the range.
+- The default values are for the city of New York.
+
+UI Code Sample
+========================================================
+I have omitted the documentation lines since the code is too large to fit in one slide.
+
+
+```r
+library(shiny)
+library(dplyr)
+library(leaflet)
+ui <- fluidPage(
+    headerPanel("Create Random Landmarks"),
+    headerPanel(" "),# Add vertical space between two lines
+    sidebarPanel(# Documentation lines
+                 numericInput("lat", "Latitude", value = 40.7128, min = -90.0000, max = 90.0000 ),
+                 # Documentation lines
+                 numericInput("lon", "Longitude", value = -74.0060, min = -180.0000, max = 180.0000 ),
+                 # Documentation lines
+                 sliderInput("rnge", "Range", value = 0.05, min = 0.00, max = 1.00),
+                 # Documentation lines
+                 numericInput("no_of_points", "Number of Landmarks", value = 500, min = 100, max = 1500),
+                 actionButton("submit", "Generate Map"),
+                 width = 3),
+    mainPanel(leafletOutput("map")))
+```
+
+Server Code Sample
+========================================================
+Generates and displays the markers on the leaflet map
+
+
+```r
+server <- function(input, output, session) {
+    
+    
+    df <- eventReactive(input$submit, { data.frame(lat = runif(input$no_of_points,
+                                 min = input$lat - input$rnge,
+                                 max = input$lat + input$rnge),
+                     lng = runif(input$no_of_points,
+                                 min = input$lon - input$rnge,
+                                 max = input$lon + input$rnge))
+    })
+    
+    output$map <- renderLeaflet(leaflet(data = df()) %>%
+                                    addTiles() %>%
+                                    addMarkers(clusterOptions = markerClusterOptions()))
+}
+```
+
+Links
+========================================================
+Please open the links in a new tab as simply clicking might generate an error.
+
+- Link to the app:
+
+<https://shouankshastri.shinyapps.io/Week_4_Assignment/>
+
+- Link to the repo:
+
+<https://github.com/shounakshastri/Developing-Data-Products-Assignment>
